@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Product Data from Open Food Facts API</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #loadDataBtn {
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .product-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Details</h1>
+<button id="loadDataBtn">Load Product Data</button>
+
+<table id="productTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody id="Data-list">
+        <!-- Data will be dynamically populated here -->
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        $("#loadDataBtn").click(function() {
+            $.ajax({
+                url: "https://fakestoreapi.com/products",
+                method: "GET",
+                success: function(products) {
+                    var dataList = $("#Data-list");
+                    dataList.empty();
+
+                    // Iterate through each product and append to table
+                    products.forEach(function(product) {
+                        var row = `<tr>
+                            <td>${product.title}</td>
+                            <td>${product.category}</td>
+                            <td>${product.price}</td>
+                            <td><img src="${product.image}" alt="${product.title}" class="product-image"></td>
+                        </tr>`;
+                        dataList.append(row);
+                    });
+                },
+                error: function() {
+                    alert("Failed to fetch product data.");
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
